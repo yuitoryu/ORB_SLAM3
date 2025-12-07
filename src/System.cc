@@ -798,6 +798,153 @@ void System::SaveTrajectoryKITTI(const string &filename)
     f.close();
 }
 
+// void System::SavePointCloud(const string &filename)
+// {
+//     ofstream f(filename);
+//     Map* pMap = mpAtlas->GetCurrentMap();
+//     vector<MapPoint*> points = pMap->GetAllMapPoints();
+
+//     std::cout << "Saving " << points.size() << " points to " << filename << " ..." << std::endl;
+
+//     for (MapPoint* mp : points)
+//     {
+//         if (!mp || mp->isBad()) continue;
+//         cv::Mat pos = mp->GetWorldPos();
+//         f << pos.at<float>(0) << " "
+//           << pos.at<float>(1) << " "
+//           << pos.at<float>(2) << "\n";
+//     }
+
+//     f.close();
+// }
+
+// void System::SavePointCloud(const std::string &filename)
+// {
+//     // Lock system to avoid race conditions
+//     unique_lock<mutex> lock(mMutexState);
+
+//     // Get the current map
+//     Map* pMap = mpAtlas->GetCurrentMap();
+//     if (!pMap)
+//     {
+//         cout << "[SavePointCloudPLY] No map found!" << endl;
+//         return;
+//     }
+
+//     vector<MapPoint*> points = pMap->GetAllMapPoints();
+
+//     // Count valid (non-bad) points
+//     size_t validCount = 0;
+//     for (auto mp : points)
+//         if (mp && !mp->isBad())
+//             validCount++;
+
+//     // Open file
+//     ofstream f(filename);
+//     if (!f.is_open())
+//     {
+//         cerr << "[SavePointCloudPLY] Cannot write file: " << filename << endl;
+//         return;
+//     }
+
+//     // -------------------------
+//     // Write PLY header
+//     // -------------------------
+//     f << "ply\nformat ascii 1.0\n";
+//     f << "element vertex " << validCount << "\n";
+//     f << "property float x\n";
+//     f << "property float y\n";
+//     f << "property float z\n";
+//     f << "end_header\n";
+
+//     // -------------------------
+//     // Write points
+//     // -------------------------
+//     for (auto mp : points)
+//     {
+//         if (!mp || mp->isBad())
+//             continue;
+
+//         cv::Mat pos = mp->GetWorldPos();
+
+//         // xyz
+//         f << pos.at<float>(0) << " "
+//           << pos.at<float>(1) << " "
+//           << pos.at<float>(2) << "\n";
+//     }
+
+//     f.close();
+//     cout << "[SavePointCloudPLY] Saved " << validCount
+//          << " points to " << filename << endl;
+// }
+
+void System::SavePointCloud(const std::string &folder)
+{
+    unique_lock<mutex> lock(mMutexState);
+
+    // Get all maps
+    std::vector<Map*> maps = mpAtlas->GetAllMaps();
+    if (maps.empty())
+    {
+        std::cout << "[SaveEachMapPLY] No maps found\n";
+        return;
+    }
+
+    // Process each map
+    for (size_t id = 0; id < maps.size(); id++)
+    {
+        Map* pMap = maps[id];
+        if (!pMap) continue;
+
+        std::vector<MapPoint*> points = pMap->GetAllMapPoints();
+
+        // Count valid points
+        size_t count = 0;
+        for (auto mp : points)
+            if (mp && !mp->isBad()) count++;
+
+        // Prepare filename
+        std::string filename = folder + "/map_" + std::to_string(id) + ".ply";
+
+        std::ofstream f(filename);
+        if (!f.is_open())
+        {
+            std::cerr << "[SaveEachMapPLY] Cannot open " << filename << std::endl;
+            continue;
+        }
+
+        // Write PLY header
+        f << "ply\nformat ascii 1.0\n";
+        f << "element vertex " << count << "\n";
+        f << "property float x\n";
+        f << "property float y\n";
+        f << "property float z\n";
+        f << "end_header\n";
+
+        // Write points
+        for (auto mp : points)
+        {
+            if (!mp || mp->isBad()) continue;
+
+            cv::Mat pos = mp->GetWorldPos();
+            f << pos.at<float>(0) << " "
+              << pos.at<float>(1) << " "
+              << pos.at<float>(2) << "\n";
+        }
+
+        f.close();
+
+        std::cout << "[SaveEachMapPLY] Saved map " << id
+                  << " with " << count << " points to " << filename << "\n";
+    }
+
+    std::cout << "[SaveEachMapPLY] Completed saving " 
+              << maps.size() << " maps.\n";
+}
+
+
+
+
 
 void System::SaveDebugData(const int &initIdx)
 {

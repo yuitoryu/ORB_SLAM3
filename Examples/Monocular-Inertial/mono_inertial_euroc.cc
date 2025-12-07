@@ -207,6 +207,9 @@ int main(int argc, char *argv[])
     // Stop all threads
     SLAM.Shutdown();
 
+    SLAM.SavePointCloud("output/point_cloud");
+
+
     // Save camera trajectory
     if (bFileName)
     {

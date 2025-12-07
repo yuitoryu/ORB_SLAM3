@@ -1,0 +1,80 @@
+%YAML:1.0
+---
+
+# Camera Parameters
+Camera.type: "PinHole"
+
+Camera.fx: 479.13627794137795
+Camera.fy: 479.2026849350976
+Camera.cx: 532.5502455465884
+Camera.cy: 289.76243416851776
+
+Camera.k1: -0.292834927425786
+Camera.k2: 0.09663550669854115
+Camera.p1: -0.0008994503781978252
+Camera.p2: 0.00015341861037053705
+Camera.k3: -0.01598327481921296
+
+Camera.width: 1024
+Camera.height: 576
+
+Camera.fps: 10.0     # adjust if needed
+Camera.RGB: 1
+
+Camera.bf: 0.0
+
+Stereo.ThDepth: 40.0
+
+# ORB Extractor Parameters
+ORBextractor.nFeatures: 1500
+ORBextractor.scaleFactor: 1.2
+ORBextractor.nLevels: 8
+ORBextractor.iniThFAST: 20
+ORBextractor.minThFAST: 7
+
+# Viewer Parameters
+Viewer.Active: 0
+Viewer.KeyFrameSize: 0.05
+Viewer.KeyFrameLineWidth: 1
+Viewer.GraphLineWidth: 0.9
+Viewer.PointSize: 2
+Viewer.CameraSize: 0.08
+Viewer.CameraLineWidth: 3
+Viewer.ViewpointX: 0
+Viewer.ViewpointY: -0.7
+Viewer.ViewpointZ: -5
+Viewer.ViewpointF: 500
+
+# image_width: 1024
+
+# image_height: 576
+
+# camera_name: front_camera
+
+# camera_matrix:
+#   rows: 3
+#   cols: 3
+#   data: [479.13627794137795, 0.0, 532.5502455465884,
+#          0.0, 479.2026849350976, 289.76243416851776,
+#          0.0, 0.0, 1.0]
+
+# distortion_model: plumb_bob
+
+# distortion_coefficients:
+#   rows: 1
+#   cols: 5
+#   data: [-0.292834927425786, 0.09663550669854115, -0.0008994503781978252, 0.00015341861037053705, -0.01598327481921296]
+
+# rectification_matrix:
+#   rows: 3
+#   cols: 3
+#   data: [1.0, 0.0, 0.0,
+#          0.0, 1.0, 0.0,
+#          0.0, 0.0, 1.0]
+
+# projection_matrix:
+#   rows: 3
+#   cols: 4
+#   data: [479.13627794137795, 0.0, 532.5502455465884, 0.0,
+#          0.0, 479.2026849350976, 289.76243416851776, 0.0,
+#          0.0, 0.0, 1.0, 0.0]
